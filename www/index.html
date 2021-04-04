@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; media-src *; img-src 'self' data: content:;"> -->
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;"> -->
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+        <meta name="color-scheme" content="light dark">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/main.css">
+        <title>Hello World</title>
+    </head>
+    <body>
+        <div style="width: 100%;height: 100vh;" class="super-flex justify-content-center align-items-center">
+            <div class="row justify-content-center" style="width: 100%;">
+                <div class="col-lg-10 col-12">
+                    <button type="button" class="btn btn-info btn-lg btn-block" id="cor_aleatoria">Gerar Cor Aleatória</button>
+                </div>
+            </div>
+            <div class="row justify-content-center" style="width: 100%;">
+                <div class="col-lg-10 col-12">
+                    <div class="row fundo">
+                        <div class="col super-flex justify-content-center" id="num1">
+                            <label class="text-center vermelho">Verm.</label>
+                            <button type="button" class="btn btn-danger btn-lg btn-block">+</button>
+                            <input class="form-control input-num" type="number" readonly max=255 min=0 value="0">
+                            <button type="button" class="btn btn-secondary btn-lg btn-block">-</button>
+                        </div>
+                        <div class="col super-flex justify-content-center" id="num2">
+                            <label class="text-center verde">Verde</label>
+                            <button type="button" class="btn btn-success btn-lg btn-block">+</button>
+                            <input class="form-control input-num" type="number" readonly max=255 min=0 value="0">
+                            <button type="button" class="btn btn-secondary btn-lg btn-block">-</button>
+                        </div>
+                        <div class="col super-flex justify-content-center" id="num3">
+                            <label class="text-center azul">Azul</label>
+                            <button type="button" class="btn btn-primary btn-lg btn-block">+</button>
+                            <input class="form-control input-num" type="number" readonly max=255 min=0 value="0">
+                            <button type="button" class="btn btn-secondary btn-lg btn-block">-</button>
+                        </div>
+                    </div>
+                    <div class="row fundo">
+                        <div class="col super-flex justify-content-center align-items-center border" id="cor" style="height: 100%;background-color: #000000;">
+                            <label id="mostra_cor">#000000</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="cordova.js"></script>
+        <script src="js/jquery.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+
+            var timeoutId = 0;
+            let pressed = 0;
+            let color = "#000000"
+            let current_color = "#000000";
+            const inputs = ['num1','num2','num3'];
+            const hex = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
+
+
+
+            for(let i = 0;i < inputs.length;i++)
+            {
+                let element =  $('#' + inputs[i] + ' > button').eq(0)
+                    element.on('touchstart', function() {
+                    clearTimeout(timeoutId);
+                    pressed = inputs[i];
+                    timeoutId = setInterval(aumentar, 25);
+
+                    }).on('touchend', function() {
+                        clearTimeout(timeoutId);
+                    });
+
+                    element =  $('#' + inputs[i] + ' > button').eq(1)
+                    element.on('touchstart', function() {
+                    clearTimeout(timeoutId);
+                    pressed = inputs[i];
+                    timeoutId = setInterval(diminuir, 25);
+
+                    }).on('touchend', function() {
+                        clearTimeout(timeoutId);
+                    });
+            }
+
+            $('#cor_aleatoria').on('touchstart', gerar_cor_aleatoria);
+
+            function gerar_cor_aleatoria()
+            {
+                let r =  Math.floor(Math.random() * 256);
+                let g =  Math.floor(Math.random() * 256);
+                let b =  Math.floor(Math.random() * 256);
+                $("#" + inputs[0] + " > input").val(r)
+                $("#" + inputs[1] + " > input").val(g)
+                $("#" + inputs[2] + " > input").val(b)
+                atualizar_cor();
+
+            }
+
+            function atualizar_cor()
+            {
+                let r = number_to_hex( $("#" + inputs[0] + " > input").val() );
+                let g = number_to_hex( $("#" + inputs[1] + " > input").val() );
+                let b = number_to_hex( $("#" + inputs[2] + " > input").val() );
+                color = "#" + r + g + b;
+                $("#cor").css("background-color", color)
+                $("#mostra_cor").text( color );
+            }
+
+
+            function aumentar()
+            {
+                let input_num = $("#" + pressed + " > input");
+                if(input_num.val() > 254) return;
+                input_num.val( parseInt(input_num.val()) + 1 );
+                atualizar_cor();
+            }
+
+            function diminuir()
+            {
+                let input_num = $("#" + pressed + " > input");
+                if(input_num.val() < 1) return;
+                input_num.val( parseInt(input_num.val()) - 1 );
+                atualizar_cor();
+            }
+
+            function number_to_hex(num)
+            {
+                num = parseInt(num);
+                let num1 = parseInt(num / 16);
+                let num2 = num - (num1 * 16);
+                return hex[num1] + hex[num2];
+
+            }
+
+
+
+
+        </script>
+    </body>
+</html>

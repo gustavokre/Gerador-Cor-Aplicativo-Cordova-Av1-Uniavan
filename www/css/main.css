@@ -1,0 +1,77 @@
+@media (min-width: 0px){
+body{font-size:0.7rem;}
+}
+@media (min-width: 350px){
+body{font-size:0.9rem;}
+}
+@media (min-width: 1200px){
+body{font-size:1rem;}
+}
+
+.fundo > div
+{
+    padding: 15px;
+    height: auto;
+}
+
+.fundo
+{
+    height: 40vh !important;
+}
+
+.super-flex
+{
+    display: flex !important;
+    flex-direction: column;
+}
+
+.input-num
+{
+    text-align: center;
+    writing-mode: vertical-rl;
+    word-wrap: break-word;
+    text-orientation: upright !important;
+    font-size: 2em;
+    padding: 5px !important;
+    flex: 1;
+}
+
+button
+{
+    font-size: 1.5em;
+}
+
+.row
+{
+    margin: 0 !important;
+}
+
+#mostra_cor
+{
+    font-size: 2em;
+    color: #fff;
+    text-shadow: 1px 1px 2px #333;
+    text-shadow: 1px 1px 2px #333;
+}
+
+#cor
+{
+    border-radius: 20px;
+}
+
+.verde
+{
+    color: green;
+    font-size: 1.5em;
+}
+.vermelho
+{
+    color: red;
+    font-size: 1.5em;
+}
+
+.azul
+{
+    color: blue;
+    font-size: 1.5em;
+}
